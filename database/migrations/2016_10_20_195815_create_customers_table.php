@@ -14,6 +14,8 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('address_id')->unsigned();
+            $table->foreign('address_id')->references('id')->on('addresses');
             $table->string('cnpj_cpf', 14);
             $table->string('name');
             $table->tinyInteger('satus');

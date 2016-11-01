@@ -25,3 +25,7 @@ Route::group(['before' => 'oauth'], function() {
 		['except' => ['create', 'edit']]
 	);
 });
+
+Route::get('home', function() {
+	return view('app');
+});
