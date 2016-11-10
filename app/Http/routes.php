@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return phpinfo();
-});
-
 // Get the access token of the oauth2
 Route::post('oauth/access_token', function() {
     return Response::json(Authorizer::issueAccessToken());
@@ -26,6 +22,6 @@ Route::group(['before' => 'oauth'], function() {
 	);
 });
 
-Route::get('home', function() {
+Route::get('/', function() {
 	return view('app');
 });

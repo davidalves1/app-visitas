@@ -11,5 +11,7 @@
 		var vm = this;
 
 		vm.hello = 'Hello AngularJS!';
+
+		vm.ola = 'Olá mundo!';
 	}
 })();
