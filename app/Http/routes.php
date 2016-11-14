@@ -17,7 +17,12 @@ Route::post('oauth/access_token', function() {
 });
 
 Route::group(['before' => 'oauth'], function() {
-	Route::resource('user', 'UserController',
+	Route::resource('users', 'UserController',
+		['except' => ['create', 'edit']]
+	);
+
+	// Address
+	Route::resource('addresses', 'AddressController',
 		['except' => ['create', 'edit']]
 	);
 });

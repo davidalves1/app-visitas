@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 use App\Http\Requests;
-use App\Customer;
+use App\Address;
 
-class CustomerController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return response()->json(Customer::All());
+        return response()->json(Address::all());
     }
 
     /**
@@ -41,7 +40,7 @@ class CustomerController extends Controller
             return response()->json(['create' => false], 422);
         }
 
-        Customer::create($request->all());
+        Address::create($request->all());
 
         return response()->json(['created' => true]);
     }
@@ -54,7 +53,11 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $address = Address::where('id', $id)
+            ->with('city.state')
+            ->firstOrFail();
+        
+        return response()->json($address);
     }
 
     /**
@@ -66,7 +69,22 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'city_id' => 'required|integer|exists:cities,id',
+            'street' => 'required|string',
+            'number' => 'required|string',
+            'neighborhood' => 'required|string',
+            'complement' => 'string',
+            'zip_code' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['updated' => false], 422);
+        }
+
+        Address::findOrFail($id)->update($request->all());
+
+        return response()->json(['updated' => true]);
     }
 
     /**
@@ -77,6 +95,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Address::findOrFail($id)->delete();
+
+        return response()->json(['deleted' => true]);
     }
 }
